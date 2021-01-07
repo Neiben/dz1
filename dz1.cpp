@@ -5,12 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <cmath>
-#include <ctime>
-#include <algorithm>
-#include <climits>
 #include <cstdlib>
-#include<bitset>
 using namespace std;
 
   string text = "you come on like a bloodstained hurricane, leave me alone let me be this time, you carry on like a holy man pushing redemption I dont want to mention, the reason i know that i am Stricken and cant let you go ";
@@ -29,34 +24,27 @@ void fill_blocks(  string& text, vector<Block>& block1)
     {
         textdt.push_back(zaglushka);
     }
-    int how_many_blocks = textdt.length() /12;
-    cout << "we get " << how_many_blocks << " blocks " << '\n';
+    int how_many_blocks = textdt.length() /12;   
     block1.resize(how_many_blocks);
     for (int j = 0; j < textdt.length() / 12; j++)
     {
         block1[j].block += (textdt.substr(a, 12));
-        a += 12;
-        cout << block1[j].block << '\n';
+        a += 12;        
     }
 
 }    
 void create_gamma(Block& gamma )
-{ 
-       
+{        
     for (int g = 0; g <12 ; g++) 
     {    
         int gammas = rand();
-        gamma.block .push_back(gammas);             
-        cout << gamma.block[g] ;      
-    }
-    cout << endl;
+        gamma.block .push_back(gammas);                            
+       }
     }
 Block operator^ (Block& block1, Block& gamma) {
     Block Ksor;
     for (int h = 0; h < 12; h++) {
-        Ksor.block.push_back (block1.block[h] ^ gamma.block[h]);  
-        cout << Ksor.block[h] ;
-        
+        Ksor.block.push_back (block1.block[h] ^ gamma.block[h]);                
     }  
     return Ksor;  
   }
@@ -77,9 +65,7 @@ Block operator << (Block& Ksor, int u) {
    last = static_cast<unsigned char> (Ksor.block[11]) << u;
    first = static_cast<unsigned char> (Ksor.block[0]) >> 1;
   shift.block.push_back (last | first);
-  cout << shift.block;
     return shift;
-
  }
  
 Block operator >> (Block& shift, int u) {
@@ -100,7 +86,6 @@ Block operator >> (Block& shift, int u) {
     string abc;
     abc. push_back(last_2 | first_2);
    shift_2.block = abc + shift_2.block ;
-    cout << shift_2.block;
     return shift_2;
 }
 
@@ -111,8 +96,8 @@ int main(int argc, char* argv[])
     ofstream file("hw1.txt", ios::out);
     file << text << endl;
     file.close();  
-
-     srand(111);
+    int random = atoi(argv[1]);
+     srand(random);
      
      vector<Block> block1; 
      string textdt = text;
@@ -131,34 +116,26 @@ int main(int argc, char* argv[])
      {
          create_gamma(gamma[i]);
      }
-     cout << " ksor = " << endl;
      for (int t = 0; t < how_many_blocks; t++) {
-
          
-         block1[t] = block1[t] ^ gamma[t];
-         
+         block1[t] = block1[t] ^ gamma[t];     
      }
-     cout << endl;
-     cout << " shift = " << endl;
+    
      for (int s = 0; s < how_many_blocks; s++) {
          
             block1[s] = block1[s] << 7;
                      
      }
-     cout << endl;
-     cout  << "shift_r = " << endl;
+    
      for (int d = 0; d < how_many_blocks; d++) {
          
          block1[d] = (block1[d] >> 7) ;
-     }
-     cout << endl;
-     
-     srand(111);
+     }   
+     srand(random);
      for (int o = 0; o < how_many_blocks; o++)
      {
          create_gamma(gamma_2[o]);
      }
-     cout << " ksor_2 = " << endl;
      for (int e = 0; e < how_many_blocks; e++) 
      {
          block1[e] = block1[e] ^ gamma_2[e];
