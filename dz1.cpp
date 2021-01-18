@@ -92,7 +92,7 @@ Block operator >> (Block& shift, int u) {
 int main(int argc, char* argv[])
 
  {
-
+    int function = atoi(argv[2]);
     ofstream file("hw1.txt", ios::out);
     file << text << endl;
     file.close();  
@@ -112,37 +112,56 @@ int main(int argc, char* argv[])
      int a = 0;
      vector <Block> gamma(how_many_blocks);
      vector <Block> gamma_2(how_many_blocks);
-     for (int i = 0; i < how_many_blocks; i++)
-     {
-         create_gamma(gamma[i]);
-     }
-     for (int t = 0; t < how_many_blocks; t++) {
-         
-         block1[t] = block1[t] ^ gamma[t];     
-     }
-    
-     for (int s = 0; s < how_many_blocks; s++) {
-         
-            block1[s] = block1[s] << 7;
-                     
-     }
-    
-     for (int d = 0; d < how_many_blocks; d++) {
-         
-         block1[d] = (block1[d] >> 7) ;
-     }   
-     srand(random);
-     for (int o = 0; o < how_many_blocks; o++)
-     {
-         create_gamma(gamma_2[o]);
-     }
-     for (int e = 0; e < how_many_blocks; e++) 
-     {
-         block1[e] = block1[e] ^ gamma_2[e];
+     if (function == 1) {
+         for (int i = 0; i < how_many_blocks; i++)
+         {
+             create_gamma(gamma[i]);
+         }
+         for (int t = 0; t < how_many_blocks; t++) {
 
-         ofstream file("hw1.txt", ios::app);
-         file << block1[e].block;
-         file.close();
+             block1[t] = block1[t] ^ gamma[t];
+         }
+
+         for (int s = 0; s < how_many_blocks; s++) {
+
+             block1[s] = block1[s] << 7;
+             ofstream file("hw1.txt", ios::app);
+             file << block1[s].block;
+             file.close();
+         }
+     }
+     if (function == 2) {
+         for (int i = 0; i < how_many_blocks; i++)
+         {
+             create_gamma(gamma[i]);
+         }
+         for (int t = 0; t < how_many_blocks; t++) {
+
+             block1[t] = block1[t] ^ gamma[t];
+         }
+
+         for (int s = 0; s < how_many_blocks; s++) {
+
+             block1[s] = block1[s] << 7;
+
+         }
+         for (int d = 0; d < how_many_blocks; d++) {
+
+             block1[d] = (block1[d] >> 7);
+         }
+         srand(random);
+         for (int o = 0; o < how_many_blocks; o++)
+         {
+             create_gamma(gamma_2[o]);
+         }
+         for (int e = 0; e < how_many_blocks; e++)
+         {
+             block1[e] = block1[e] ^ gamma_2[e];
+
+             ofstream file("hw1.txt", ios::app);
+             file << block1[e].block;
+             file.close();
+         }
      }
     
      
