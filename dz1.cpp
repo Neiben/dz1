@@ -7,67 +7,66 @@
 #include <vector>
 #include <cstdlib>
 using namespace std;
-
-  string text = "you come on like a bloodstained hurricane, leave me alone let me be this time, you carry on like a holy man pushing redemption I dont want to mention, the reason i know that i am Stricken and cant let you go ";
-struct  Block 
+struct  Block
 {
-   string block;
+    string block;
     uint8_t blocksize = 12;
-
-  };
-void fill_blocks(  string& text, vector<Block>& block1)
+    
+    
+};
+void  fill_blocks(string& text, vector<Block>& block1)
 {
     int a = 0;
-    string textdt = text; 
+    string textdt = text;
     char zaglushka = '=';
-    while (textdt.length() % 12 != 0) 
+    while (textdt.length() % 12 != 0)
     {
         textdt.push_back(zaglushka);
     }
-    int how_many_blocks = textdt.length() /12;   
+    int how_many_blocks = textdt.length() / 12;
     block1.resize(how_many_blocks);
     for (int j = 0; j < textdt.length() / 12; j++)
     {
         block1[j].block += (textdt.substr(a, 12));
-        a += 12;        
+        a += 12;
     }
-
-}    
-void create_gamma(Block& gamma )
-{        
-    for (int g = 0; g <12 ; g++) 
-    {    
+    
+}
+void create_gamma(Block& gamma)
+{
+    for (int g = 0; g < 12; g++)
+    {
         int gammas = rand();
-        gamma.block .push_back(gammas);                            
-       }
+        gamma.block.push_back(gammas);
     }
+}
 Block operator^ (Block& block1, Block& gamma) {
     Block Ksor;
     for (int h = 0; h < 12; h++) {
-        Ksor.block.push_back (block1.block[h] ^ gamma.block[h]);                
-    }  
-    return Ksor;  
-  }
+        Ksor.block.push_back(block1.block[h] ^ gamma.block[h]);
+    }
+    return Ksor;
+}
 
 Block operator << (Block& Ksor, int u) {
     Block shift;
     unsigned char second;
     unsigned char last;
     unsigned char first;
-    
-    for (int y = 0; y < Ksor.block.size()-1; y++) {
 
-       second = (static_cast<unsigned char>(Ksor.block[y + 1]) >> 1); 
+    for (int y = 0; y < Ksor.block.size() - 1; y++) {
+
+        second = (static_cast<unsigned char>(Ksor.block[y + 1]) >> 1);
 
         shift.block.push_back((static_cast<unsigned char> (Ksor.block[y]) << u) | second);
-     
+
     }
-   last = static_cast<unsigned char> (Ksor.block[11]) << u;
-   first = static_cast<unsigned char> (Ksor.block[0]) >> 1;
-  shift.block.push_back (last | first);
+    last = static_cast<unsigned char> (Ksor.block[11]) << u;
+    first = static_cast<unsigned char> (Ksor.block[0]) >> 1;
+    shift.block.push_back(last | first);
     return shift;
- }
- 
+}
+
 Block operator >> (Block& shift, int u) {
     Block shift_2;
     unsigned char second_2;
@@ -78,97 +77,152 @@ Block operator >> (Block& shift, int u) {
 
         second_2 = (static_cast<unsigned char>(shift.block[y]) << 1);
 
-        shift_2.block.push_back((static_cast<unsigned char> (shift.block[y+1]) >> u) | second_2);
+        shift_2.block.push_back((static_cast<unsigned char> (shift.block[y + 1]) >> u) | second_2);
 
     }
     last_2 = static_cast<unsigned char> (shift.block[11]) << 1;
     first_2 = static_cast<unsigned char> (shift.block[0]) >> u;
     string abc;
-    abc. push_back(last_2 | first_2);
-   shift_2.block = abc + shift_2.block ;
+    abc.push_back(last_2 | first_2);
+    shift_2.block = abc + shift_2.block;
     return shift_2;
 }
+bool operator += (string str , vector<string> vec) {
+    for (int i = 0; i < vec.size(); i ++) {
+        str += vec[i];
+    }
+    return true;
+}
+
 
 int main(int argc, char* argv[])
+{
+    ////////////////////////  all arguments ///////////////////////////////
+    int random = stoi(argv[1]);     // key for gamma`s generation 
 
- {
-    int function = atoi(argv[2]);
-    ofstream file("hw1.txt", ios::out);
-    file << text << endl;
-    file.close();  
-    int random = atoi(argv[1]);
-     srand(random);
+    string function = (argv[2]);   // functions of programm
+
+    string output_file = argv[3];   // //
+                                        
+    string output_file2 = argv[4];     //// files 
+                                       
+    string output_file3 = argv[5];  // //
+    ///////////////////////////////////////////////////////////////////////
+    string text;
+    int how_many_blocks = text.length() / 12;
+  if (function == "encryption"){      
+      srand(random);
+      string str;
+    vector<Block> block1;
+    string text;
+    ofstream file;
+    file.open(output_file, ios::out);
+    if (!file.is_open()) {
+        cout<< "error file openning";
+    }
+    else {
+        cout << "enter your text : ";
+        getline(cin, text);
+        file << text;
+    }
+    file.close();
+    
+    fill_blocks(text, block1);  
+    vector <Block> gamma(how_many_blocks);  
+        for (int i = 0; i < how_many_blocks; i++)
+        {
+            create_gamma(gamma[i]);
+        }
+        for (int t = 0; t < how_many_blocks; t++) {
+
+            block1[t] = block1[t] ^ gamma[t];
+        }
+
+        for (int s = 0; s < how_many_blocks; s++) {
+
+            block1[s] = block1[s] << 7;
+        }
+        for (int i = 0; i < how_many_blocks; i++) {
+            str += block1[i].block;
+           
+        }
+
+        ofstream file2;
+       file2.open (output_file2 , ios::out);
+       if (!file2.is_open()) {
+           cout << "error file openning";
+       }
+       else {                  
+           file2 << str;
+       }
+       file2.close();
+        
+    }
+   if (function == "decryption") {
+       srand(random);
+       string str3;
+       ifstream file4;
+       file4.open(output_file2);
+       if (!file4.is_open()) {
+           cout << "error file openning";
+       }
+       else {
+           char ch;           
+               while (file4.get(ch)) {
+                   str3.push_back(ch);
+               }
+           
+       }
+
+       file4.close();      
+       int how_many_blocks2 = str3.size() / 12;
+         vector <Block> gamma_2(how_many_blocks2);     
+         vector <Block> block2;       
+         
+         string str4;
      
-     vector<Block> block1; 
-     string textdt = text;
-     char zaglushka = '=';
-     while (textdt.length() % 12 != 0)
-     {
-         textdt.push_back(zaglushka);
-     }
-     int how_many_blocks = textdt.length() / 12; 
+         
+             fill_blocks(str3, block2);
+             for (int d = 0; d < how_many_blocks2; d++) {
 
-     fill_blocks(text, block1);
-     int a = 0;
-     vector <Block> gamma(how_many_blocks);
-     vector <Block> gamma_2(how_many_blocks);
-     if (function == 1) {
-         for (int i = 0; i < how_many_blocks; i++)
-         {
-             create_gamma(gamma[i]);
-         }
-         for (int t = 0; t < how_many_blocks; t++) {
+                 block2[d] = (block2[d] >> 7);
+             }
+             for (int o = 0; o < how_many_blocks2; o++)
+             {
+                 create_gamma(gamma_2[o]);
+             }
+             for (int e = 0; e < how_many_blocks2; e++)
+             {
+                 block2[e] = block2[e] ^ gamma_2[e];
+             }
+             for (int i = 0; i < how_many_blocks2; i++) {
+                 str4 += block2[i].block;
 
-             block1[t] = block1[t] ^ gamma[t];
-         }
+             }
+             
+        ofstream file3;
+        file3.open(output_file3, ios::out);
+        if (!file3.is_open()) {
+            cout << "error file openning";
+        }
+        else {
+            file3 << str4;
+        }
+        file3.close();
+    }
 
-         for (int s = 0; s < how_many_blocks; s++) {
 
-             block1[s] = block1[s] << 7;
-             ofstream file("hw1.txt", ios::app);
-             file << block1[s].block;
-             file.close();
-         }
-     }
-     if (function == 2) {
-         for (int i = 0; i < how_many_blocks; i++)
-         {
-             create_gamma(gamma[i]);
-         }
-         for (int t = 0; t < how_many_blocks; t++) {
 
-             block1[t] = block1[t] ^ gamma[t];
-         }
 
-         for (int s = 0; s < how_many_blocks; s++) {
 
-             block1[s] = block1[s] << 7;
-
-         }
-         for (int d = 0; d < how_many_blocks; d++) {
-
-             block1[d] = (block1[d] >> 7);
-         }
-         srand(random);
-         for (int o = 0; o < how_many_blocks; o++)
-         {
-             create_gamma(gamma_2[o]);
-         }
-         for (int e = 0; e < how_many_blocks; e++)
-         {
-             block1[e] = block1[e] ^ gamma_2[e];
-
-             ofstream file("hw1.txt", ios::app);
-             file << block1[e].block;
-             file.close();
-         }
-     }
+}
+       
     
      
      
 
      
-}
+
 
 
 
