@@ -108,26 +108,29 @@ int main(int argc, char* argv[])
                                        
     string output_file3 = argv[5];  // //
     ///////////////////////////////////////////////////////////////////////
-    string text;
-    int how_many_blocks = text.length() / 12;
+   
   if (function == "encryption"){      
       srand(random);
       string str;
     vector<Block> block1;
-    string text;
-    ofstream file;
-    file.open(output_file, ios::out);
+    string textt;
+    ifstream file;
+    file.open(output_file, ios::in);
     if (!file.is_open()) {
         cout<< "error file openning";
     }
     else {
-        cout << "enter your text : ";
-        getline(cin, text);
-        file << text;
+        cout << "file is open, starting encryption... ";
+        char ch;
+        while (file.get(ch)) { 
+            textt.push_back(ch);
+        }
     }
     file.close();
-    
-    fill_blocks(text, block1);  
+  
+   
+    int how_many_blocks = textt.length() / 12;
+    fill_blocks(textt, block1);  
     vector <Block> gamma(how_many_blocks);  
         for (int i = 0; i < how_many_blocks; i++)
         {
@@ -146,7 +149,7 @@ int main(int argc, char* argv[])
             str += block1[i].block;
            
         }
-
+       
         ofstream file2;
        file2.open (output_file2 , ios::out);
        if (!file2.is_open()) {
@@ -162,18 +165,17 @@ int main(int argc, char* argv[])
        srand(random);
        string str3;
        ifstream file4;
-       file4.open(output_file2);
+       file4.open(output_file2, ios :: in);
        if (!file4.is_open()) {
            cout << "error file openning";
        }
        else {
-           char ch;           
-               while (file4.get(ch)) {
-                   str3.push_back(ch);
-               }
-           
+           unsigned char k;
+           while (!file4.eof()) {
+               file4.read(reinterpret_cast <char*>(&k), sizeof(k));
+               str3.push_back(k);
+           }
        }
-
        file4.close();      
        int how_many_blocks2 = str3.size() / 12;
          vector <Block> gamma_2(how_many_blocks2);     
