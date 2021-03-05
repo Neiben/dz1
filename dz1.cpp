@@ -106,7 +106,6 @@ int main(int argc, char* argv[])
                                         
     string output_file2 = argv[4];     //// files 
                                        
-    string output_file3 = argv[5];  // //
     ///////////////////////////////////////////////////////////////////////
    
   if (function == "encryption"){      
@@ -177,6 +176,8 @@ int main(int argc, char* argv[])
            }
        }
        file4.close();      
+       cout << endl;
+       cout << str3;
        int how_many_blocks2 = str3.size() / 12;
          vector <Block> gamma_2(how_many_blocks2);     
          vector <Block> block2;       
@@ -185,7 +186,8 @@ int main(int argc, char* argv[])
      
          
              fill_blocks(str3, block2);
-             for (int d = 0; d < how_many_blocks2; d++) {
+             for (int d = 0; d < how_many_blocks2; d++)
+             {
 
                  block2[d] = (block2[d] >> 7);
              }
@@ -203,7 +205,7 @@ int main(int argc, char* argv[])
              }
              
         ofstream file3;
-        file3.open(output_file3, ios::out);
+        file3.open(output_file, ios::out);
         if (!file3.is_open()) {
             cout << "error file openning";
         }
